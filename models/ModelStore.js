@@ -8,4 +8,13 @@ const getAllProducts = async () => {
   return result;
 };
 
-module.exports = { getAllProducts };
+const getProductsById = async (id) => {
+  const query = 'SELECT * FROM StoreManager.products WHERE id = ?;';
+
+  const [result] = await connection.execute(query, [id]);
+
+  if (result.length === 0) return false;
+  return result;
+};
+
+module.exports = { getAllProducts, getProductsById };
