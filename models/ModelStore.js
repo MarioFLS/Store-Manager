@@ -1,11 +1,9 @@
 const connection = require('../database/connection');
 
-const querySales = `SELECT sp.sale_id, s.date, sp.product_id, p.quantity 
+const querySales = `SELECT sp.sale_id, s.date, sp.product_id, sp.quantity 
 FROM StoreManager.sales AS s 
 INNER JOIN StoreManager.sales_products AS sp
-ON s.id = sp.sale_id
-INNER JOIN StoreManager.products AS p
-ON p.id = sp.sale_id`;
+ON s.id = sp.sale_id`;
 
 const getAllProducts = async () => {
   const query = 'SELECT * FROM StoreManager.products;';
