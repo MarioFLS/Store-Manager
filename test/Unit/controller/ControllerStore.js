@@ -1,61 +1,40 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
 const connection = require('../../../database/connection');
-const ModelStore = require('../../../models/ModelStore');
+const ControllersStore = require('../../../controllers/ControllerStore');
 
 
-describe("Testando Camada de Models", () => {
+describe("Testando a Camada de Controller", () => {
 
-  describe("Chamada de todos os itens", () => {
+  describe("Teste das Saidas e suas respostas", () => {
+    const response = {};
+    const request = {};
+    const result = [
+      {
+        "id": 1,
+        "name": "Martelo de Thor",
+        "quantity": 10
+      },
+      {
+        "id": 2,
+        "name": "Escudo do Cap",
+        "quantity": 30
+      },
+    ];
     before(() => {
-      const execute = [
-        {
-          "id": 1,
-          "name": "Martelo de Thor",
-          "quantity": 10
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Cap",
-          "quantity": 30
-        },
-      ];
-  
-      sinon.stub(connection, "execute").resolves(execute);
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns(result);
+      sinon.stub(ControllersStore, "getAllProducts").resolves(result);
     });
-  
+
     after(() => {
       connection.execute.restore();
     });
     it("retorna um objeto", async () => {
-      //CHAMEI O CREATE, ELE FAZ O CONNECTION EXECUTE E RETORNA O VALOR INSERIDO IGUAL A 1
-      const [response] = await ModelStore.getAllProducts();
+      await ControllersStore.getAllProducts(request, response);
 
-      expect(response).to.be.a("object");
+      expect(response.status.calledWith(200)).to.be.equal(result);
     });
   });
 
-  describe('Busca do Item pelo ID', () => {
-    before(() => {
-      const execute = [
-        {
-          "id": 1,
-          "name": "Martelo de Thor",
-          "quantity": 10
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Cap",
-          "quantity": 30
-        },
-      ];
-  
-      sinon.stub(connection, "execute").resolves(execute);
-    });
-    it('Saida dos Produtos', async () => {
-      const id = 1
-      const [response] = await ModelStore.getProductsById(id);
-      expect(response).to.be.a("object");
-    });
-  });
 });
