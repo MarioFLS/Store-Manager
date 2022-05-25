@@ -53,7 +53,8 @@ describe("Testando Camada de Models", () => {
       sinon.stub(connection, "execute").resolves(execute);
     });
     it('Saida dos Produtos', async () => {
-      const [response] = await ModelStore.getProductsById();
+      const id = 1
+      const [response] = await ModelStore.getProductsById(id);
       expect(response).to.be.a("object");
     });
   });
