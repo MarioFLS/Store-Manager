@@ -19,4 +19,20 @@ const getProductsById = rescue(async (req, res, next) => {
   return res.status(200).json(product[0]);
 });
 
-module.exports = { getAllProducts, getProductsById };
+const getAllSales = rescue(async (_req, res) => {
+  const result = await ModelStore.getAllSales();
+  return res.status(200).json(result);
+});
+
+const getSalesById = rescue(async (req, res, next) => {
+  const { id } = req.params;
+
+  const product = await ServiceStore.getSalesById(id);
+
+  if (product.error) {
+    return next(product.error);
+  }
+
+  return res.status(200).json(product);
+});
+module.exports = { getAllProducts, getProductsById, getAllSales, getSalesById };

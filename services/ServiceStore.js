@@ -8,4 +8,11 @@ const getProductsById = async (id) => {
   return product;
 };
 
-module.exports = { getProductsById };
+const getSalesById = async (id) => {
+  const product = await ModelStore.getSalesById(id);
+
+  if (!product) return { error: { message: 'Sale not found', code: 404 } };
+
+  return product;
+};
+module.exports = { getProductsById, getSalesById };
