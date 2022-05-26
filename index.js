@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const app = require('./app');
 require('dotenv').config();
+require('express-async-errors');
 const { getAllProducts, getProductsById,
 getAllSales, getSalesById } = require('./controllers/ControllerStore');
 const errorMiddleware = require('./middlewares/error');
