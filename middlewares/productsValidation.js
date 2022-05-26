@@ -7,7 +7,7 @@ const validateProduct = Joi.object({
 .min(1),
 });
 
-const validadeteBodyProduct = (req, res, next) => {
+const productsValidation = (req, res, next) => {
   const { error } = validateProduct.validate(req.body);
   if (error) {
     if (error.details[0].type === 'string.min' || error.details[0].type === 'number.min') {
@@ -15,7 +15,7 @@ const validadeteBodyProduct = (req, res, next) => {
     }
     return res.status(400).json({ message: error.details[0].message });
   }
-  return next();
+  next();
 };
 
-module.exports = validadeteBodyProduct;
+module.exports = productsValidation;
