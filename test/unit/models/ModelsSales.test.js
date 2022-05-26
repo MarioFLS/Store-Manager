@@ -38,22 +38,44 @@ describe("Testando Camada de Models - Sales", () => {
   describe('Retorna a busca do Produto pelo ID', () => {
 
     beforeEach(() => {
-      sinon.spy(connection, 'execute');
+      const execute = [[
+        {
+          "date": "2021-09-09T04:54:29.000Z",
+          "product_id": 1,
+          "quantity": 2
+        }
+      ]];
+      sinon.stub(connection, 'execute').resolves(execute);
     });
     afterEach(() => {
       connection.execute.restore();
     });
     it('Busca da venda pelo ID', async () => {
-      const id = 1
-      const getSalesById = await ModelStore.getSalesById(id);
+      const getSalesById = await ModelStore.getSalesById(1);
       expect(getSalesById).to.be.a('array');
+      expect(getSalesById).to.deep.equal([
+        {
+          "date": "2021-09-09T04:54:29.000Z",
+          "productId": 1,
+          "quantity": 2
+        }
+      ])
       expect(getSalesById[0]).to.have.all.keys('date', 'productId', 'quantity');
     });
-
-    it('Erro caso o ID não exista', async () => {
-      const id = 999;
-      const getSalesById = await ModelStore.getSalesById(id);
-      expect(getSalesById).to.be.false;
-    });
   });
+
+  describe('Caso não exista produto com o ID correspondente', () => {
+    beforeEach(() => {
+      const execute = [[]];
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+    afterEach(() => {
+      connection.execute.restore();
+    });
+
+    it('O Retorno deve ser um "false"', async () => {
+      const getProductsById = await ModelStore.getSalesById(90);
+      expect(getProductsById).to.false;
+    })
+  })
 });

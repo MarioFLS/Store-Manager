@@ -36,31 +36,46 @@ describe("Testando Camada de Models - Products", () => {
 
   describe('Retorna a busca do Produto pelo ID', () => {
     beforeEach(() => {
+      const execute = [[
+        {
+          "id": 2,
+          "name": "Traje de encolhimento",
+          "quantity": 20
+        },
+      ]];
 
-      sinon.spy(connection, 'execute')
+      sinon.stub(connection, 'execute').resolves(execute);
       
     });
     afterEach(() => {
       connection.execute.restore();
     });
+
     it('Query é a correta', async () => {
-      const id = 2
-      await ModelStore.getProductsById(id);
+      await ModelStore.getProductsById(2);
       const query = connection.execute.getCall(0);
       expect(query.args).to.deep.equal([ 'SELECT * FROM StoreManager.products WHERE id = ?;', [ 2 ] ]);
     });
 
-    it('Produto buscado pelo ID', async() => {
-      const id = 2
-      const getProductsById = await ModelStore.getProductsById(id);
+  it('Produto buscado pelo ID', async() => {
+      const getProductsById = await ModelStore.getProductsById(2);
       expect(getProductsById).to.be.a('array');
       expect(getProductsById).to.deep.equal([ { id: 2, name: 'Traje de encolhimento', quantity: 20 } ]);
     });
-
-    it('Caso o id do Produto não exista', async() => {
-      const id = 999;
-      const getProductsById = await ModelStore.getProductsById(id);
-      expect(getProductsById).to.be.false;
-    });
   }); 
+
+  describe('Caso não exista produto com o ID correspondente', () => {
+    beforeEach(() => {
+      const execute = [[]];
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+    afterEach(() => {
+      connection.execute.restore();
+    });
+
+    it('O Retorno deve ser um "false"', async () => {
+      const getProductsById = await ModelStore.getProductsById(90);
+      expect(getProductsById).to.false;
+    })
+  })
 });
