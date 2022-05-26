@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
 const connection = require('../../../database/connection');
-const ModelStore = require('../../../models/ModelStore');
+const ServiceStore = require('../../../services/ServiceStore');
 
 
 describe("Testando Camada de Models - Sales", () => {
@@ -29,7 +29,7 @@ describe("Testando Camada de Models - Sales", () => {
       connection.execute.restore();
     });
     it("Retorna um array com todos os itens", async () => {
-      const response = await ModelStore.getAllSales();
+      const response = await ServiceStore.getSalesById(1);
 
       expect(response).to.be.a("array");
     });
@@ -45,15 +45,15 @@ describe("Testando Camada de Models - Sales", () => {
     });
     it('Busca da venda pelo ID', async () => {
       const id = 1
-      const getSalesById = await ModelStore.getSalesById(id);
+      const getSalesById = await ServiceStore.getSalesById(id);
       expect(getSalesById).to.be.a('array');
       expect(getSalesById[0]).to.have.all.keys('date', 'productId', 'quantity');
     });
 
     it('Erro caso o ID não exista', async () => {
       const id = 999;
-      const getSalesById = await ModelStore.getSalesById(id);
-      expect(getSalesById).to.be.false;
+      const getSalesById = await ServiceStore.getSalesById(id);
+      expect(getSalesById).to.deep.equal( { error: { message: 'Sale not found', code: 404 } });
     });
   });
 });
