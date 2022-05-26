@@ -36,18 +36,6 @@ describe("Testando Camada de Models - Products", () => {
 
   describe('Retorna a busca do Produto pelo ID', () => {
     beforeEach(() => {
-      const execute = [[
-        {
-          "id": 1,
-          "name": "Martelo de Thor",
-          "quantity": 10
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Cap",
-          "quantity": 30
-        },
-      ]];
 
       sinon.spy(connection, 'execute')
       

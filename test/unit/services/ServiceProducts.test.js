@@ -4,28 +4,19 @@ const connection = require('../../../database/connection');
 const ServiceStore = require('../../../services/ServiceStore');
 
 describe("Testando Camada de Service - Products", () => {
+  const response = {};
+  const request = {};
 
   describe("Buscando Produto pela ID", () => {
     beforeEach(() => {
-      const execute = [[
-        {
-          "id": 1,
-          "name": "Martelo de Thor",
-          "quantity": 10
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Cap",
-          "quantity": 30
-        },
-      ]];
+      request.body = {};
 
-      sinon.stub(connection, "execute").resolves(execute);
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
     });
 
-    afterEach(() => {
-      connection.execute.restore();
-    });
     it("Retorna array com todos os itens", async () => {
       const response = await ServiceStore.getProductsById(1);
 
@@ -35,21 +26,9 @@ describe("Testando Camada de Service - Products", () => {
 
   describe('Retorna a busca do Produto pelo ID', () => {
     beforeEach(() => {
-      const execute = [[
-        {
-          "id": 1,
-          "name": "Martelo de Thor",
-          "quantity": 10
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Cap",
-          "quantity": 30
-        },
-      ]];
 
       sinon.spy(connection, 'execute')
-      
+
     });
     afterEach(() => {
       connection.execute.restore();
@@ -58,20 +37,20 @@ describe("Testando Camada de Service - Products", () => {
       const id = 2
       await ServiceStore.getProductsById(id);
       const query = connection.execute.getCall(0);
-      expect(query.args).to.deep.equal([ 'SELECT * FROM StoreManager.products WHERE id = ?;', [ 2 ] ]);
+      expect(query.args).to.deep.equal(['SELECT * FROM StoreManager.products WHERE id = ?;', [2]]);
     });
 
-    it('Produto buscado pelo ID', async() => {
+    it('Produto buscado pelo ID', async () => {
       const id = 2
       const getProductsById = await ServiceStore.getProductsById(id);
       expect(getProductsById).to.be.a('array');
-      expect(getProductsById).to.deep.equal([ { id: 2, name: 'Traje de encolhimento', quantity: 20 } ]);
+      expect(getProductsById).to.deep.equal([{ id: 2, name: 'Traje de encolhimento', quantity: 20 }]);
     });
 
-    it('Caso o id do Produto não exista', async() => {
+    it('Caso o id do Produto não exista', async () => {
       const id = 999;
       const getProductsById = await ServiceStore.getProductsById(id);
-      expect(getProductsById).to.deep.equal({"error": {"code": 404, "message": "Product not found"}});
+      expect(getProductsById).to.deep.equal({ "error": { "code": 404, "message": "Product not found" } });
     });
-  }); 
+  });
 });
