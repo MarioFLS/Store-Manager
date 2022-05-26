@@ -2,7 +2,6 @@ const sinon = require("sinon");
 const { expect } = require("chai");
 const ControllerStore = require('../../../controllers/ControllerStore');
 const connection = require('../../../database/connection');
-const errorMiddleware = require('../../../middlewares/error');
 const ServiceStore = require('../../../services/ServiceStore');
 
 
@@ -12,13 +11,23 @@ describe("Testando a Camada de Controller", () => {
     const req = {};
     const res = {};
     beforeEach(() => {
-
+      const execute = [[{
+        "id": 1,
+        "name": "Martelo de Thor",
+        "quantity": 10
+      }]];
+      req.body = {};
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
+
+      sinon.stub(connection, 'execute').resolves(execute);
     });
 
+    afterEach(() => {
+      connection.execute.restore();
+    });
     it("Retorno do Status quando sucesso", async () => {
       await ControllerStore.getAllProducts(req, res);
 
@@ -41,7 +50,7 @@ describe("Testando a Camada de Controller", () => {
       res.json = sinon.stub()
         .returns();
 
-        sinon.stub(connection, 'execute').resolves(execute);
+      sinon.stub(connection, 'execute').resolves(execute);
     });
 
     afterEach(() => {
@@ -53,9 +62,9 @@ describe("Testando a Camada de Controller", () => {
 
       expect(res.status.calledWith(200)).to.be.equal(true);
     });
+
     it("Objeto de retorno quando tem sucesso", async () => {
       const a = await ControllerStore.getProductsById(req, res);
-      console.log(a)
       expect(res.json.calledWith({
         "id": 1,
         "name": "Martelo de Thor",
@@ -75,8 +84,8 @@ describe("Testando a Camada de Controller", () => {
         .returns(res);
       res.json = sinon.stub()
         .returns();
-        sinon.stub(connection, 'execute').resolves([[]]);
-        sinon.stub(ServiceStore, 'getProductsById').resolves(erro); 
+      sinon.stub(connection, 'execute').resolves([[]]);
+      sinon.stub(ServiceStore, 'getProductsById').resolves(erro);
     });
     afterEach(() => {
       connection.execute.restore();
