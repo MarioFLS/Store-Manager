@@ -30,13 +30,18 @@ describe("Testando a Camada de Controller", () => {
     const req = {};
     const res = {};
     beforeEach(() => {
+      const execute = [[{
+        "id": 1,
+        "name": "Martelo de Thor",
+        "quantity": 10
+      }]];
       req.params = { id: 1 };
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
 
-        sinon.spy(connection, 'execute');
+        sinon.stub(connection, 'execute').resolves(execute);
     });
 
     afterEach(() => {
@@ -48,13 +53,14 @@ describe("Testando a Camada de Controller", () => {
 
       expect(res.status.calledWith(200)).to.be.equal(true);
     });
-    it("Resposta do servidor quando tem sucesso", async () => {
-      await ControllerStore.getProductsById(req, res);
-      expect(res.json.calledWith(sinon.match({
+    it("Objeto de retorno quando tem sucesso", async () => {
+      const a = await ControllerStore.getProductsById(req, res);
+      console.log(a)
+      expect(res.json.calledWith({
         "id": 1,
         "name": "Martelo de Thor",
         "quantity": 10
-      }))).to.be.equal(true);
+      })).to.be.equal(true);
     });
   });
 
@@ -63,13 +69,14 @@ describe("Testando a Camada de Controller", () => {
     const res = {};
     const next = sinon.stub().returns();
     beforeEach(() => {
+      const erro = { error: { message: 'Product not found', code: 404 } };
       req.params = { id: 20 };
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
-        sinon.spy(connection, 'execute');
-        sinon.spy(ServiceStore, 'getProductsById'); 
+        sinon.stub(connection, 'execute').resolves([[]]);
+        sinon.stub(ServiceStore, 'getProductsById').resolves(erro); 
     });
     afterEach(() => {
       connection.execute.restore();
