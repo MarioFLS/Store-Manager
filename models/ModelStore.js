@@ -40,6 +40,8 @@ const getSalesById = async (id) => {
   const [result] = await connection.execute(query, [id]);
 
   if (result.length === 0) return false;
+  const a = result.map(serialize)[0].date;
+  console.log(typeof a);
   return result.map(serialize);
 };
 
