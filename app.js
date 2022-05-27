@@ -1,9 +1,11 @@
+require('express-async-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
-const { createProduct } = require('./controllers/ControllerCreate');
-require('express-async-errors');
-const { getAllProducts, getProductsById,
-  getAllSales, getSalesById } = require('./controllers/ControllerStore');
+const { createProduct, editProduct } = require('./controllers/ControllerCreate');
+const { getAllProducts,
+  getProductsById,
+  getAllSales,
+  getSalesById } = require('./controllers/ControllerStore');
 const errorMiddleware = require('./middlewares/error');
 const productsValidation = require('./middlewares/productsValidation');
 const salesValidation = require('./middlewares/salesValidation');
@@ -24,12 +26,9 @@ app.get('/sales', getAllSales);
 app.get('/sales/:id', getSalesById);
 
 app.post('/products', productsValidation, createProduct);
+app.put('/products/:id', productsValidation, editProduct);
 
 app.post('/sales', salesValidation, (req, res) => {
-  res.status(200).json({ message: 'Funcionou' });
-});
-
-app.put('/products/:id', productsValidation, (req, res) => {
   res.status(200).json({ message: 'Funcionou' });
 });
 
