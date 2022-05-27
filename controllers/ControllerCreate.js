@@ -1,5 +1,4 @@
 const ServiceCreate = require('../services/ServiceCreate');
-const ModelCreate = require('../models/ModelCreateProduct');
 const { findProductId, findProductName } = require('../models/FindDatabaseItem');
 
 const createProduct = async (req, res, next) => {
@@ -24,4 +23,14 @@ const editProduct = async (req, res, next) => {
   return res.status(200).json(result);
 };
 
-module.exports = { createProduct, editProduct };
+const deleteProduct = async (req, res, next) => {
+  const { id } = req.params;
+
+  const product = await ServiceCreate.deleteProduct(id);
+
+  if (product.error) return next(product.error);
+
+  return res.status(204).json();
+};
+
+module.exports = { createProduct, editProduct, deleteProduct };
