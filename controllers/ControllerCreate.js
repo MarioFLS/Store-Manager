@@ -1,13 +1,14 @@
-const ModelCreate = require('../models/ModelCreate');
-const connection = require('../database/connection');
+const ServiceCreate = require('../services/ServiceCreate');
+const { findProduct } = require('../models/FindDatabaseItem');
 
-const createProduct = async (req, res) => {
+const createProduct = async (req, res, next) => {
   const { name, quantity } = req.body;
-  await ModelCreate.createProduct(name, quantity);
-
-  const query = 'SELECT * FROM StoreManager.products WHERE name = ?;';
-  const [result] = await connection.execute(query, [name]);
-  return res.status(201).json(result[0]);
+  const product = await ServiceCreate.createProduct(name, quantity);
+  
+  if (product.error) return next(product.error);
+  
+  const [result] = await findProduct(name);
+  return res.status(201).json(result);
 };
 
 module.exports = { createProduct };
