@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const { createProduct } = require('./controllers/ControllerCreate');
 require('express-async-errors');
 const { getAllProducts, getProductsById,
   getAllSales, getSalesById } = require('./controllers/ControllerStore');
@@ -22,9 +23,7 @@ app.get('/products/:id', getProductsById);
 app.get('/sales', getAllSales);
 app.get('/sales/:id', getSalesById);
 
-app.post('/products', productsValidation, (req, res) => {
-  res.status(200).json({ message: 'Funcionou' });
-});
+app.post('/products', productsValidation, createProduct);
 
 app.post('/sales', salesValidation, (req, res) => {
   res.status(200).json({ message: 'Funcionou' });
