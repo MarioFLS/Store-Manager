@@ -17,4 +17,14 @@ const createSalesProducts = async (salesId, arrBody) => {
   return sales;
 };
 
-module.exports = { createSales, createSalesProducts };
+const EditSalesProducts = async (saleId, arrBody) => {
+  const query = `UPDATE StoreManager.sales_products 
+  SET product_id = ?, quantity = ?
+  WHERE sale_id = ? AND product_id = ? `;
+  
+  const sales = await Promise.allSettled(arrBody.map(({ productId, quantity }) => 
+  connection.execute(query, [productId, quantity, saleId, productId])));
+  return sales;
+};
+
+module.exports = { createSales, createSalesProducts, EditSalesProducts };

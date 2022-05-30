@@ -2,7 +2,7 @@ require('express-async-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
 const CreateProducts = require('./controllers/ControllerCreateProduct');
-const { createSales } = require('./controllers/ControllerCreateSales');
+const CreateSales = require('./controllers/ControllerCreateSales');
 const Products = require('./controllers/ControllerStore');
 const errorMiddleware = require('./middlewares/error');
 const productsValidation = require('./middlewares/productsValidation');
@@ -27,11 +27,9 @@ app.post('/products', productsValidation, CreateProducts.createProduct);
 app.put('/products/:id', productsValidation, CreateProducts.editProduct);
 app.delete('/products/:id', CreateProducts.deleteProduct);
 
-app.post('/sales', salesValidation, createSales);
+app.post('/sales', salesValidation, CreateSales.createSales);
 
-app.put('/sales/:id', salesValidation, (req, res) => {
-  res.status(200).json({ message: 'Funcionou' });
-});
+app.put('/sales/:id', salesValidation, CreateSales.EditSales);
 
 app.use(errorMiddleware);
 // não remova essa exportação, é para o avaliador funcionar
