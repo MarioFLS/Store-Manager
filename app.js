@@ -1,11 +1,9 @@
 require('express-async-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
-const { createProduct, editProduct, deleteProduct } = require('./controllers/ControllerCreate');
-const { getAllProducts,
-  getProductsById,
-  getAllSales,
-  getSalesById } = require('./controllers/ControllerStore');
+const CreateProducts = require('./controllers/ControllerCreateProduct');
+const { createSales } = require('./controllers/ControllerCreateSales');
+const Products = require('./controllers/ControllerStore');
 const errorMiddleware = require('./middlewares/error');
 const productsValidation = require('./middlewares/productsValidation');
 const salesValidation = require('./middlewares/salesValidation');
@@ -19,19 +17,17 @@ app.get('/', (_request, response) => {
 
 app.use(bodyParser.json());
 
-app.get('/products', getAllProducts);
-app.get('/products/:id', getProductsById);
+app.get('/products', Products.getAllProducts);
+app.get('/products/:id', Products.getProductsById);
 
-app.get('/sales', getAllSales);
-app.get('/sales/:id', getSalesById);
+app.get('/sales', Products.getAllSales);
+app.get('/sales/:id', Products.getSalesById);
 
-app.post('/products', productsValidation, createProduct);
-app.put('/products/:id', productsValidation, editProduct);
-app.delete('/products/:id', deleteProduct);
+app.post('/products', productsValidation, CreateProducts.createProduct);
+app.put('/products/:id', productsValidation, CreateProducts.editProduct);
+app.delete('/products/:id', CreateProducts.deleteProduct);
 
-app.post('/sales', salesValidation, (req, res) => {
-  res.status(200).json({ message: 'Funcionou' });
-});
+app.post('/sales', salesValidation, createSales);
 
 app.put('/sales/:id', salesValidation, (req, res) => {
   res.status(200).json({ message: 'Funcionou' });
