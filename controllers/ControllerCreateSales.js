@@ -1,4 +1,5 @@
 const ModelCreateSales = require('../models/ModelCreateSales');
+const serviceSales = require('../services/ServiceSales');
 
 const createSales = async (req, res) => {
   const [{ insertId }] = await ModelCreateSales.createSales();
@@ -7,13 +8,24 @@ const createSales = async (req, res) => {
   res.status(201).json({ id: insertId, itemsSold: req.body });
 };
 
-const EditSales = async (req, res) => {
+const editSales = async (req, res, next) => {
   const { id } = req.params;
-  await ModelCreateSales.EditSalesProducts(id, req.body);
+  const sales = await serviceSales.editSales(id, req.body);
+
+  if (sales.error) return next(sales.error);
   
   res.status(200).json({ saleId: id, itemUpdated: req.body });
 };
 
-module.exports = { createSales, EditSales };
+const deleteSales = async (req, res, next) => {
+  const { id } = req.params;
+  const sales = await serviceSales.deleteSales(id);
+  console.log(sales);
+  if (sales.error) return next(sales.error);
+  
+  res.status(204).json();
+};
+
+module.exports = { createSales, editSales, deleteSales };
 
 // const [{ insertId }] = await createSales();

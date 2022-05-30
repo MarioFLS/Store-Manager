@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const CreateProducts = require('./controllers/ControllerCreateProduct');
 const CreateSales = require('./controllers/ControllerCreateSales');
-const Products = require('./controllers/ControllerStore');
+const Products = require('./controllers/ControllerFindItems');
 const errorMiddleware = require('./middlewares/error');
 const productsValidation = require('./middlewares/productsValidation');
 const salesValidation = require('./middlewares/salesValidation');
@@ -28,8 +28,8 @@ app.put('/products/:id', productsValidation, CreateProducts.editProduct);
 app.delete('/products/:id', CreateProducts.deleteProduct);
 
 app.post('/sales', salesValidation, CreateSales.createSales);
-
-app.put('/sales/:id', salesValidation, CreateSales.EditSales);
+app.put('/sales/:id', salesValidation, CreateSales.editSales);
+app.delete('/sales/:id', CreateSales.deleteSales);
 
 app.use(errorMiddleware);
 // não remova essa exportação, é para o avaliador funcionar

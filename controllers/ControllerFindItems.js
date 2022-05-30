@@ -1,5 +1,5 @@
-const ModelStore = require('../models/ModelStore');
-const ServiceStore = require('../services/ServiceStore');
+const ModelStore = require('../models/getItemsDatabase');
+const ServiceStore = require('../services/ServiceSales');
 
 const getAllProducts = async (_req, res) => {
   const result = await ModelStore.getAllProducts();

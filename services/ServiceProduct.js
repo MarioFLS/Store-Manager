@@ -1,4 +1,4 @@
-const { findProductName, findProductId } = require('../models/FindDatabaseItem');
+const { findProductName, findProductId } = require('../models/FindInTheDatabase');
 const ModelCreat = require('../models/ModelCreateProduct');
 
 const createProduct = async (name, quantity) => {

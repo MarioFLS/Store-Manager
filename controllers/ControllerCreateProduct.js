@@ -1,5 +1,5 @@
-const ServiceCreate = require('../services/ServiceCreate');
-const { findProductId, findProductName } = require('../models/FindDatabaseItem');
+const ServiceCreate = require('../services/ServiceProduct');
+const { findProductId, findProductName } = require('../models/FindInTheDatabase');
 
 const createProduct = async (req, res, next) => {
   const { name, quantity } = req.body;

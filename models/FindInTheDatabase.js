@@ -12,4 +12,10 @@ const findProductId = async (id) => {
   return result;
 };
 
-module.exports = { findProductName, findProductId };
+const findSalesId = async (id) => {
+  const query = 'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?;';
+  const [result] = await connection.execute(query, [id]);
+  return result;
+};
+
+module.exports = { findProductName, findProductId, findSalesId };
