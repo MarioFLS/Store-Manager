@@ -13,12 +13,13 @@ const createSalesProducts = async (salesId, arrBody) => {
   VALUES (?, ?, ?)`;
 
   const queryUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
-  SET p.quantity = p.quantity - s.quantity`;
+  SET p.quantity = p.quantity - s.quantity
+  WHERE s.sale_id = ? AND p.id = ?;`;
 
   const sales = await Promise.all(arrBody.map(({ productId, quantity }) => {
-    connection.execute(queryCreateSales, [salesId, productId, quantity]); 
-    return connection.execute(queryUpdate);
-}));
+    connection.execute(queryCreateSales, [salesId, productId, quantity]);
+    return connection.execute(queryUpdate, [salesId, productId]);
+  }));
   return sales;
 };
 
@@ -26,23 +27,24 @@ const editSalesProducts = async (salesId, arrBody) => {
   const queryProductUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
   SET p.quantity = (
   IF((? < s.quantity), (p.quantity - (? - s.quantity)), (p.quantity + (s.quantity - ?)))
-  ) WHERE p.id = ?;`;
+  ) WHERE s.product_id = ? AND p.id = ? AND s.product_id = ?  ;`;
 
   const querySalesUpdate = `UPDATE StoreManager.sales_products 
   SET product_id = ?, quantity = ?
   WHERE sale_id = ? AND product_id = ?;`;
 
   const sales = await Promise.all(arrBody.map(({ productId, quantity }) => {
-    connection.execute(queryProductUpdate, [quantity, quantity, quantity, productId]);
-    return connection.execute(querySalesUpdate, [productId, quantity, salesId, productId]); 
-}));
+    connection.execute(queryProductUpdate, [quantity, quantity, quantity, productId,
+      productId, productId]);
+    return connection.execute(querySalesUpdate, [productId, quantity, salesId, productId]);
+  }));
   return sales;
 };
 
 const deleteSales = async (saleId) => {
   const queryUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
   SET p.quantity = p.quantity + s.quantity`;
-  
+
   const queryDelete = 'DELETE FROM StoreManager.sales_products WHERE sale_id = ?';
 
   await connection.execute(queryUpdate, [saleId]);
