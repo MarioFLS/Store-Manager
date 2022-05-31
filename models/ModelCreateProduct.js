@@ -5,6 +5,7 @@ const createProduct = async (name, quantity) => {
   VALUES (?, ?)`;
 
   const product = await connection.execute(query, [name, quantity]);
+  console.log(product);
   return product;
 };
 
