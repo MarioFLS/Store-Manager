@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
 const connection = require('../../../database/connection');
-const ServiceStore = require('../../../services/ServiceStore');
+const ServiceStore = require('../../../services/ServiceSales');
 
 
 describe("Testando Camada de Models - Sales", () => {

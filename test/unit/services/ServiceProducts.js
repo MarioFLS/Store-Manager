@@ -1,11 +1,9 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const connection = require('../../../database/connection');
-const ServiceStore = require('../../../services/ServiceStore');
+const ServiceStore = require('../../../services/ServiceProduct');
 
 describe("Testando Camada de Service - Products", () => {
-  const response = {};
-  const request = {};
 
   describe("Buscando Produto pela ID", () => {
     beforeEach(() => {
