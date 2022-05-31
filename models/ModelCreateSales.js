@@ -23,13 +23,19 @@ const createSalesProducts = async (salesId, arrBody) => {
 };
 
 const editSalesProducts = async (saleId, arrBody) => {
-  const query = `UPDATE StoreManager.sales_products 
-  SET product_id = ?, quantity = ?
-  WHERE sale_id = ? AND product_id = ?;
-  `;
+  const queryProductUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
+  SET p.quantity = (
+  IF((? < s.quantity), (p.quantity - (? - s.quantity)), (p.quantity + (s.quantity - ?)))
+  );`;
 
-  const sales = await Promise.allSettled(arrBody.map(({ productId, quantity }) =>
-    connection.execute(query, [productId, quantity, saleId, productId])));
+  const querySalesupdate = `UPDATE StoreManager.sales_products 
+  SET product_id = ?, quantity = ?
+  WHERE sale_id = ? AND product_id = ?;`;
+
+  const sales = await Promise.allSettled(arrBody.map(({ productId, quantity }) => {
+    connection.execute(queryProductUpdate, [quantity, quantity, quantity]);
+    return connection.execute(querySalesupdate, [productId, quantity, saleId, productId]); 
+}));
   return sales;
 };
 
