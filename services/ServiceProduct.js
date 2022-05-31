@@ -1,6 +1,14 @@
 const { findProductName, findProductId } = require('../models/FindInTheDatabase');
 const ModelCreat = require('../models/ModelCreateProduct');
+const getItemsDatabase = require('../models/getItemsDatabase');
 
+const getProductsById = async (id) => {
+  const product = await getItemsDatabase.getProductsById(id);
+
+  if (!product) return { error: { message: 'Product not found', code: 404 } };
+
+  return product;
+};
 const createProduct = async (name, quantity) => {
   const product = await findProductName(name);
   if (product.length > 0) return { error: { message: 'Product already exists', code: 409 } };
@@ -23,4 +31,4 @@ const deleteProduct = async (id) => {
   return ModelCreat.deleteProduct(id);
 };
 
-module.exports = { createProduct, editProduct, deleteProduct };
+module.exports = { getProductsById, createProduct, editProduct, deleteProduct };

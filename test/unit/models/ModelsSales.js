@@ -63,19 +63,4 @@ describe("Testando Camada de Models - Sales", () => {
       expect(getSalesById[0]).to.have.all.keys('date', 'productId', 'quantity');
     });
   });
-
-  describe('Caso não exista produto com o ID correspondente', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('O Retorno deve ser um "false"', async () => {
-      const getProductsById = await ModelStore.getSalesById(90);
-      expect(getProductsById).to.false;
-    })
-  })
 });

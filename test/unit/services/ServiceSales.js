@@ -56,20 +56,4 @@ describe("Testando Camada de Models - Sales", () => {
       expect(getSalesById[0]).to.have.all.keys('date', 'productId', 'quantity');
     });
   });
-
-  describe('Caso não exista produto com o ID correspondente', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Deve retornar uma mensagem de Erro', async () => {
-      const getProductsById = await ServiceStore.getSalesById(90);
-      expect(getProductsById).to.deep
-      .equal({ error: { message: 'Sale not found', code: 404 } });
-    })
-  })
 });

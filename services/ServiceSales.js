@@ -2,14 +2,6 @@ const { findSalesId } = require('../models/FindInTheDatabase');
 const getItemsDatabase = require('../models/getItemsDatabase');
 const ModelCreateSales = require('../models/ModelCreateSales');
 
-const getProductsById = async (id) => {
-  const product = await getItemsDatabase.getProductsById(id);
-
-  if (!product) return { error: { message: 'Product not found', code: 404 } };
-
-  return product;
-};
-
 const getSalesById = async (id) => {
   const product = await getItemsDatabase.getSalesById(id);
 
@@ -31,4 +23,4 @@ const deleteSales = async (saleId) => {
   return ModelCreateSales.deleteSales(saleId);
 };
 
-module.exports = { getProductsById, getSalesById, editSales, deleteSales };
+module.exports = { getSalesById, editSales, deleteSales };

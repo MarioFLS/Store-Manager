@@ -1,5 +1,6 @@
 const ModelStore = require('../models/getItemsDatabase');
 const ServiceStore = require('../services/ServiceSales');
+const ServiceProduct = require('../services/ServiceProduct');
 
 const getAllProducts = async (_req, res) => {
   const result = await ModelStore.getAllProducts();
@@ -9,7 +10,7 @@ const getAllProducts = async (_req, res) => {
 const getProductsById = async (req, res, next) => {
   const { id } = req.params;
 
-  const product = await ServiceStore.getProductsById(id);
+  const product = await ServiceProduct.getProductsById(id);
 
   if (product.error) {
     return next(product.error);
