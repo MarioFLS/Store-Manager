@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
 const connection = require('../../../database/connection');
-const ModelStore = require('../../../models/getItemsDatabase');
+const getItemsDatabase = require('../../../models/getItemsDatabase');
 
 
 describe("Testando Camada de Models - Sales", () => {
@@ -29,7 +29,7 @@ describe("Testando Camada de Models - Sales", () => {
       connection.execute.restore();
     });
     it("Retorna um array com todos os itens", async () => {
-      const response = await ModelStore.getAllSales();
+      const response = await getItemsDatabase.getAllSales();
 
       expect(response).to.be.a("array");
     });
@@ -51,7 +51,7 @@ describe("Testando Camada de Models - Sales", () => {
       connection.execute.restore();
     });
     it('Busca da venda pelo ID', async () => {
-      const getSalesById = await ModelStore.getSalesById(1);
+      const getSalesById = await getItemsDatabase.getSalesById(1);
       expect(getSalesById).to.be.a('array');
       expect(getSalesById).to.deep.equal([
         {
@@ -59,8 +59,22 @@ describe("Testando Camada de Models - Sales", () => {
           "productId": 1,
           "quantity": 2
         }
-      ])
-      expect(getSalesById[0]).to.have.all.keys('date', 'productId', 'quantity');
+      ]);
+    });
+  });
+
+  describe('Retorna a busca do Produto pelo ID', () => {
+
+    beforeEach(() => {
+      const execute = [[]];
+      sinon.stub(connection, 'execute').resolves(execute);
+    });
+    afterEach(() => {
+      connection.execute.restore();
+    });
+    it('Busca da venda pelo ID', async () => {
+      const getSalesById = await getItemsDatabase.getSalesById(1);
+      expect(getSalesById).to.be.false;
     });
   });
 });
