@@ -22,19 +22,19 @@ const createSalesProducts = async (salesId, arrBody) => {
   return sales;
 };
 
-const editSalesProducts = async (saleId, arrBody) => {
+const editSalesProducts = async (salesId, arrBody) => {
   const queryProductUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
   SET p.quantity = (
   IF((? < s.quantity), (p.quantity - (? - s.quantity)), (p.quantity + (s.quantity - ?)))
-  );`;
+  ) WHERE p.id = ?;`;
 
-  const querySalesupdate = `UPDATE StoreManager.sales_products 
+  const querySalesUpdate = `UPDATE StoreManager.sales_products 
   SET product_id = ?, quantity = ?
   WHERE sale_id = ? AND product_id = ?;`;
 
-  const sales = await Promise.allSettled(arrBody.map(({ productId, quantity }) => {
-    connection.execute(queryProductUpdate, [quantity, quantity, quantity]);
-    return connection.execute(querySalesupdate, [productId, quantity, saleId, productId]); 
+  const sales = await Promise.all(arrBody.map(({ productId, quantity }) => {
+    connection.execute(queryProductUpdate, [quantity, quantity, quantity, productId]);
+    return connection.execute(querySalesUpdate, [productId, quantity, salesId, productId]); 
 }));
   return sales;
 };
@@ -45,7 +45,7 @@ const deleteSales = async (saleId) => {
   
   const queryDelete = 'DELETE FROM StoreManager.sales_products WHERE sale_id = ?';
 
-  await connection.execute(queryUpdate);
+  await connection.execute(queryUpdate, [saleId]);
   const sales = await connection.execute(queryDelete, [saleId]);
   return sales;
 };

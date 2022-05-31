@@ -6,6 +6,7 @@ const CreateSales = require('./controllers/ControllerCreateSales');
 const Products = require('./controllers/ControllerFindItems');
 const errorMiddleware = require('./middlewares/error');
 const productsValidation = require('./middlewares/productsValidation');
+const quantityValidation = require('./middlewares/quantityValidation');
 const salesValidation = require('./middlewares/salesValidation');
 
 const app = express();
@@ -27,8 +28,8 @@ app.post('/products', productsValidation, CreateProducts.createProduct);
 app.put('/products/:id', productsValidation, CreateProducts.editProduct);
 app.delete('/products/:id', CreateProducts.deleteProduct);
 
-app.post('/sales', salesValidation, CreateSales.createSales);
-app.put('/sales/:id', salesValidation, CreateSales.editSales);
+app.post('/sales', salesValidation, quantityValidation, CreateSales.createSales);
+app.put('/sales/:id', salesValidation, quantityValidation, CreateSales.editSales);
 app.delete('/sales/:id', CreateSales.deleteSales);
 
 app.use(errorMiddleware);
