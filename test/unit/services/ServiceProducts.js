@@ -118,7 +118,6 @@ describe('Criação de Produto, Casos de erro', () => {
     it('Retorno Caso exista um Produto já com esse nome', async () => {
       const nome = 'Traje de encolhimento';
       const getProductsById = await ServiceStore.createProduct(nome, 2);
-      console.log(getProductsById);
       expect(getProductsById).to.be.a('array');
     })
   });

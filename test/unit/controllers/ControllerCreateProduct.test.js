@@ -1,43 +1,40 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
-const ControllerStore = require('../../../controllers/ControllerFindItems');
+const CreateProduct = require('../../../controllers/ControllerCreateProduct');
 const connection = require('../../../database/connection');
 const ServiceStore = require('../../../services/ServiceProduct');
 
 
 describe("Testando a Camada de Controller", () => {
 
-  describe("Teste de Sales, quando buscamos todos os produtos", () => {
+  describe("Teste dos Produtos, quando buscamos todos os produtos", () => {
     const req = {};
     const res = {};
+    const next = sinon.stub().returns();
     beforeEach(() => {
-      const execute = [[{
-        "id": 1,
-        "name": "Martelo de Thor",
-        "quantity": 10
-      }]];
-      req.body = {};
+      const execute = [[]];
+      req.body = { "name": "Martelo dTho", "quantity": 20 };
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
-
-      sinon.stub(connection, 'execute').resolves(execute);
+      sinon.stub(ServiceStore, 'createProduct').resolves(execute);
     });
 
     afterEach(() => {
-      connection.execute.restore();
+      ServiceStore.createProduct.restore();
     });
     it("Retorno do Status quando sucesso", async () => {
-      await ControllerStore.getAllProducts(req, res);
+      await CreateProduct.createProduct(req, res, next);
 
-      expect(res.status.calledWith(200)).to.be.equal(true);
+      expect(res.status.calledWith(201)).to.be.equal(true);
     });
   });
 
-  describe("Teste de busca do Venda pelo ID", () => {
+ /*  describe("Teste de busca do Venda pelo ID", () => {
     const req = {};
     const res = {};
+    const next = sinon.stub().returns();
     beforeEach(() => {
       const execute = [[{
         "id": 1,
@@ -58,13 +55,13 @@ describe("Testando a Camada de Controller", () => {
     });
 
     it("Retorno do Status quando sucesso", async () => {
-      await ControllerStore.getProductsById(req, res);
+      await CreateProduct.getProductsById(req, res);
 
       expect(res.status.calledWith(200)).to.be.equal(true);
     });
 
     it("Objeto de retorno quando tem sucesso", async () => {
-      await ControllerStore.getProductsById(req, res);
+      await CreateProduct.getProductsById(req, res);
       expect(res.json.calledWith({
         "id": 1,
         "name": "Martelo de Thor",
@@ -84,20 +81,17 @@ describe("Testando a Camada de Controller", () => {
         .returns(res);
       res.json = sinon.stub()
         .returns();
-      sinon.stub(connection, 'execute').resolves([[]]);
       sinon.stub(ServiceStore, 'getProductsById').resolves(erro);
     });
     afterEach(() => {
-      connection.execute.restore();
       ServiceStore.getProductsById.restore();
     });
 
     it("Retorno do Status quando falha", async () => {
-      await ControllerStore.getProductsById(req, res, next);
+      await CreateProduct.getProductsById(req, res, next);
 
       // Ele não pode vir 200
       expect(res.status.calledWith(200)).to.be.equal(false);
     });
-  });
-
+  }); */
 });
