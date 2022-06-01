@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const connection = require('../../../database/connection');
 const CreateSales = require('../../../models/ModelCreateSales');
 
-describe("Testando Camada de Models - Create Products", () => {
+describe("Testando Camada de Models - Create Sales", () => {
 
   describe("Cria uma nova venda", () => {
     beforeEach(() => {
