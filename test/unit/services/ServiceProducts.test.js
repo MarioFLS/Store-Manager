@@ -2,161 +2,73 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const connection = require('../../../database/connection');
 const ServiceStore = require('../../../services/ServiceProduct');
+const findItems = require('../../../models/FindInTheDatabase');
 
 describe("Testando Camada de Service - Products", () => {
+  describe("Testando Erros de Service", () => {
+    describe('Caso não exista produto com o ID correspondente', () => {
+      beforeEach(() => {
+        const execute = [[]];
+        sinon.stub(connection, 'execute').resolves(execute);
+      });
+      afterEach(() => {
+        connection.execute.restore();
+      });
 
-  describe("Buscando Produto pela ID", () => {
-    beforeEach(() => {
-      const execute = [[
-        {
-          "id": 2,
-          "name": "Traje de encolhimento",
-          "quantity": 20
-        }
-      ]];
-      sinon.stub(connection, "execute").resolves(execute);
+      it('O retorno deve ser uma mensagem', async () => {
+        const getProductsById = await ServiceStore.getProductsById(90);
+        expect(getProductsById).to.deep
+          .equal({ error: { message: 'Product not found', code: 404 } });
+      })
     });
 
-    afterEach(() => {
-      connection.execute.restore();
+    describe("Testando função de Criar Produtos", () => {
+      beforeEach(() => {
+        const execute = [[
+          {
+            "id": 2,
+            "name": "Traje de encolhimento",
+            "quantity": 20
+          }
+        ]];
+        sinon.stub(connection, 'execute').resolves(execute);
+      });
+      afterEach(() => { connection.execute.restore() });
+      it('Saida esperada da Criação de um Produto', async () => {
+        const name = "Traje de encolhimento"
+        const product = await ServiceStore.createProduct(name, 20);
+        expect(product).to.deep.equal({ error: { message: 'Product already exists', code: 409 } });
+      });
     });
 
-    it("Retorna array com todos os itens", async () => {
-      const response = await ServiceStore.getProductsById(2);
+    describe("Testando função de editar Produtos", () => {
+      beforeEach(() => {
+        const execute = [[]];
+        sinon.stub(connection, 'execute').resolves(execute);
+        sinon.stub(findItems, 'findProductId').resolves(execute[0]);
+      });
+      afterEach(() => { connection.execute.restore() });
+      it('Testando se o Produto foi editado', async () => {
+        findItems.findProductId.restore()
+        const name = "Traje de encolhimento"
+        const product = await ServiceStore.editProduct(2, name, 20)
+        expect(product).to.deep.equal({ error: { message: 'Product not found', code: 404 } });
+      });
+    });
 
-      expect(response).to.be.a("array");
-      expect(response).to.deep.equal([{ id: 2, name: 'Traje de encolhimento', quantity: 20 }]);
+    describe("Testando função de Deletar Produtos", () => {
+      beforeEach(() => {
+        const execute = [[]];
+        sinon.stub(connection, 'execute').resolves(execute);
+        sinon.stub(findItems, 'findProductId').resolves(execute[0]);
+      });
+      afterEach(() => { connection.execute.restore() });
+      it('Testando Se o Produto foi deletado', async () => {
+        findItems.findProductId.restore()
+        const product = await ServiceStore.deleteProduct(2)
+
+        expect(product).to.deep.equal({ error: { message: 'Product not found', code: 404 } });
+      });
     });
   });
-
-  describe('Caso não exista produto com o ID correspondente', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('O retorno deve ser uma mensagem', async () => {
-      const getProductsById = await ServiceStore.getProductsById(90);
-      expect(getProductsById).to.deep
-        .equal({ error: { message: 'Product not found', code: 404 } });
-    })
-  })
-});
-
-describe('Criação de Produto, Casos de sucesso', () => {
-  describe('Criando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[{
-        "id": 2,
-        "name": "Traje de encolhimento",
-        "quantity": 20
-      }]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso exista um Produto já com esse nome', async () => {
-      const nome = 'Traje de encolhimento';
-      const getProductsById = await ServiceStore.createProduct(nome, 2);
-      expect(getProductsById).to.deep
-        .equal({ error: { message: 'Product already exists', code: 404 } });
-    })
-  });
-
-  describe('Editando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso não exista um produto com esse ID', async () => {
-      const nome = 'Traje de encolhimento';
-      const getProductsById = await ServiceStore.editProduct(1, nome, 10);
-      expect(getProductsById).to.deep
-        .equal({ error: {  message: 'Product not found', code: 404 } });
-    })
-  });
-
-  describe('Deletando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso exista um Produto já com esse nome', async () => {
-      const getProductsById = await ServiceStore.deleteProduct(2);
-      expect(getProductsById).to.deep
-        .equal({ error: {  message: 'Product not found', code: 404 } });
-    })
-  })
-});
-
-describe('Criação de Produto, Casos de erro', () => {
-  describe('Criando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso exista um Produto já com esse nome', async () => {
-      const nome = 'Traje de encolhimento';
-      const getProductsById = await ServiceStore.createProduct(nome, 2);
-      expect(getProductsById).to.be.a('array');
-    })
-  });
-
-  describe('Editando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[{
-        "id": 2,
-        "name": "Traje de encolhimento",
-        "quantity": 20
-      }]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso não exista um produto com esse ID', async () => {
-      const nome = 'Traje de encolhimento';
-      const getProductsById = await ServiceStore.editProduct(1, nome, 10);
-      expect(getProductsById).to.be.a('array');
-    })
-  });
-
-  describe('Deletando um Produto', () => {
-    beforeEach(() => {
-      const execute = [[
-        {
-          "id": 2,
-          "name": "Traje de encolhimento",
-          "quantity": 20
-        }
-      ]];
-      sinon.stub(connection, 'execute').resolves(execute);
-    });
-    afterEach(() => {
-      connection.execute.restore();
-    });
-
-    it('Retorno Caso exista um Produto já com esse nome', async () => {
-      const getProductsById = await ServiceStore.deleteProduct(2);
-      expect(getProductsById).to.be.a('array');
-    })
-  })
 });

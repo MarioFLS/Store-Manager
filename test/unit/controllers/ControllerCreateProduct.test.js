@@ -160,6 +160,7 @@ describe('Testando Erro em Controller - Teste de Produtos', () => {
       await CreateProduct.editProduct(req, res, next);
 
       expect(next.calledWith({ message: 'Product not found', code: 404 })).to.be.equal(true);
+      ServiceStore.editProduct.restore();
     });
   });
 
@@ -186,6 +187,7 @@ describe('Testando Erro em Controller - Teste de Produtos', () => {
       await CreateProduct.deleteProduct(req, res, next);
 
       expect(next.calledWith({ message: 'Product not found', code: 404 })).to.be.equal(true);
+      ServiceStore.deleteProduct.restore();
     });
   });
 });
