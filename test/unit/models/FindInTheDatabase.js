@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const res = require("express/lib/response");
 const sinon = require('sinon');
 const connection = require('../../../database/connection');
 const findItem = require('../../../models/FindInTheDatabase');

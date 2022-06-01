@@ -64,7 +64,7 @@ describe('Criação de Produto, Casos de sucesso', () => {
       const nome = 'Traje de encolhimento';
       const getProductsById = await ServiceStore.createProduct(nome, 2);
       expect(getProductsById).to.deep
-        .equal({ error: { message: 'Product already exists', code: 409 } });
+        .equal({ error: { message: 'Product already exists', code: 404 } });
     })
   });
 
