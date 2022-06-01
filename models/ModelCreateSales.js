@@ -26,16 +26,16 @@ const createSalesProducts = async (salesId, arrBody) => {
 const editSalesProducts = async (salesId, arrBody) => {
   const queryProductUpdate = `UPDATE StoreManager.products AS p, StoreManager.sales_products AS s
   SET p.quantity = (
-  IF((? < s.quantity), (p.quantity - (? - s.quantity)), (p.quantity + (s.quantity - ?)))
-  ) WHERE s.product_id = ? AND p.id = ? AND s.product_id = ?  ;`;
+  IF(( ? < s.quantity), (p.quantity - (? - s.quantity)), (p.quantity + (s.quantity - ?)))
+  ) WHERE s.product_id = ? AND p.id = ? AND s.sale_id = ? AND s.quantity != ?;`;
 
   const querySalesUpdate = `UPDATE StoreManager.sales_products 
   SET product_id = ?, quantity = ?
   WHERE sale_id = ? AND product_id = ?;`;
 
   const sales = await Promise.all(arrBody.map(({ productId, quantity }) => {
-    connection.execute(queryProductUpdate, [quantity, quantity, quantity, productId,
-      productId, productId]);
+    connection.execute(queryProductUpdate, [quantity, quantity, quantity,
+      productId, productId, salesId, quantity]);
     return connection.execute(querySalesUpdate, [productId, quantity, salesId, productId]);
   }));
   return sales;
