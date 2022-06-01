@@ -63,7 +63,6 @@ describe('Criação de Produto, Casos de sucesso', () => {
     it('Retorno Caso exista um Produto já com esse nome', async () => {
       const nome = 'Traje de encolhimento';
       const getProductsById = await ServiceStore.createProduct(nome, 2);
-      console.log(getProductsById);
       expect(getProductsById).to.deep
         .equal({ error: { message: 'Product already exists', code: 409 } });
     })
@@ -81,7 +80,6 @@ describe('Criação de Produto, Casos de sucesso', () => {
     it('Retorno Caso não exista um produto com esse ID', async () => {
       const nome = 'Traje de encolhimento';
       const getProductsById = await ServiceStore.editProduct(1, nome, 10);
-      console.log(getProductsById);
       expect(getProductsById).to.deep
         .equal({ error: {  message: 'Product not found', code: 404 } });
     })
@@ -98,7 +96,6 @@ describe('Criação de Produto, Casos de sucesso', () => {
 
     it('Retorno Caso exista um Produto já com esse nome', async () => {
       const getProductsById = await ServiceStore.deleteProduct(2);
-      console.log(getProductsById);
       expect(getProductsById).to.deep
         .equal({ error: {  message: 'Product not found', code: 404 } });
     })
@@ -159,7 +156,6 @@ describe('Criação de Produto, Casos de erro', () => {
 
     it('Retorno Caso exista um Produto já com esse nome', async () => {
       const getProductsById = await ServiceStore.deleteProduct(2);
-      console.log(getProductsById);
       expect(getProductsById).to.be.a('array');
     })
   })

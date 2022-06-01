@@ -12,26 +12,29 @@ describe("Testando a Camada de Controller", () => {
     const res = {};
     const next = sinon.stub().returns();
     beforeEach(() => {
-      const execute = [[]];
-      req.body = { "name": "Martelo dTho", "quantity": 20 };
+      const mock = [[]];
+      req.body = { "name": "Martelo do Thor", "quantity": 20 };
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
-      sinon.stub(ServiceStore, 'createProduct').resolves(execute);
+      
+      sinon.stub(ServiceStore, 'createProduct').resolves(mock);
     });
 
-    afterEach(() => {
+  /*  afterEach(() => {
       ServiceStore.createProduct.restore();
-    });
+    }) */
+
     it("Retorno do Status quando sucesso", async () => {
       await CreateProduct.createProduct(req, res, next);
 
       expect(res.status.calledWith(201)).to.be.equal(true);
+      ServiceStore.createProduct.restore();
     });
   });
 
- /*  describe("Teste de busca do Venda pelo ID", () => {
+  /* describe("Teste de busca do Venda pelo ID", () => {
     const req = {};
     const res = {};
     const next = sinon.stub().returns();

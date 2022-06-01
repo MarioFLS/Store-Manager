@@ -20,7 +20,6 @@ const editSales = async (req, res, next) => {
 const deleteSales = async (req, res, next) => {
   const { id } = req.params;
   const sales = await serviceSales.deleteSales(id);
-  console.log(sales);
   if (sales.error) return next(sales.error);
   
   res.status(204).json();

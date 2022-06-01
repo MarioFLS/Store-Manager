@@ -18,7 +18,6 @@ describe("Testando Camada de Models - Create Products", () => {
     });
     it("Retorna array com todos os itens", async () => {
       const response = await CreateProduct.createProduct();
-      console.log(response)
 
       expect(response).to.be.a("object");
     });
@@ -37,7 +36,6 @@ describe("Testando Camada de Models - Create Products", () => {
 
     it('Retorno da edição do banco de dados', async () => {
       const response = await CreateProduct.editProduct();
-      console.log(response)
       expect(response).to.be.a('object');
     });
   }); 
@@ -53,7 +51,6 @@ describe("Testando Camada de Models - Create Products", () => {
 
     it('Retorno do Delete', async () => {
       const response = await CreateProduct.deleteProduct(1);
-      console.log(response)
       expect(response).to.deep.equals([[]]);
     })
   })

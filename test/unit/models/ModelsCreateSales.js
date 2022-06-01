@@ -52,7 +52,6 @@ describe("Testando Camada de Models - Create Sales", () => {
     it('Retorno da edição do banco de dados', async () => {
       const response = await CreateSales.createSalesProducts(1, execute);
       expect(response).to.be.a('array');
-      console.log(response)
       expect(response).to.deep.equals([
         [ { productId: 1, quantity: 2 }, { productId: 2, quantity: 5 } ],
         [ { productId: 1, quantity: 2 }, { productId: 2, quantity: 5 } ]

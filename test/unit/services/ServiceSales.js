@@ -23,7 +23,6 @@ describe("Testando Camada de Models - Sales", () => {
     });
     it("Retorna um array com a venda que possua o ID correto", async () => {
       const response = await ServiceStore.getSalesById(2);
-      console.log(response);
 
       expect(response).to.be.a("array");
       expect(response).to.deep.equal([
@@ -73,7 +72,6 @@ describe("Testando Camada de Models - Sales", () => {
     });
     it("Retorna um array com a venda que possua o ID correto", async () => {
       const response = await ServiceStore.deleteSales(2, execute);
-      console.log(response);
 
       expect(response).to.be.a("array");
     });
