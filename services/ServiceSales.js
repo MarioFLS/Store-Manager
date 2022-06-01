@@ -12,7 +12,6 @@ const getSalesById = async (id) => {
 
 const editSales = async (saleId, arrBody) => {
   const sales = await findSalesId(saleId);
-  console.log(sales);
   if (sales.length === 0) return { error: { message: 'Sale not found', code: 404 } };
   
   return ModelCreateSales.editSalesProducts(saleId, arrBody);

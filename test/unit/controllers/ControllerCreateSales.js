@@ -104,38 +104,6 @@ describe("Testando a Camada de Controller - Teste de Vendas", () => {
 });
 
 describe('Testando Erro em Controller - Teste de Produtos', () => {
-  describe("Criando Produto", () => {
-    const req = {};
-    const res = {};
-    const next = sinon.stub().returns();
-    beforeEach(() => {
-      const execute = [[{
-        "id": 2,
-        "name": "Traje de encolhimento",
-        "quantity": 20
-      }]];
-      req.body = { "name": "Martelo do Thor", "quantity": 20 };
-      res.status = sinon.stub()
-        .returns(res);
-      res.json = sinon.stub()
-        .returns();
-
-      sinon.stub(connection, 'execute').resolves(execute);
-      sinon.stub(ServiceSales, 'createProduct').resolves({ error: { message: 'Product already exists', code: 404 } });
-
-    });
-
-    afterEach(() => {
-      connection.execute.restore();
-    })
-
-    it("Retorno Erro quando já existir um Produto com esse nome", async () => {
-      await CreateSales.createProduct(req, res, next);
-      expect(next.calledWith({ message: 'Product already exists', code: 404 })).to.be.equal(true);
-      ServiceSales.createProduct.restore();
-    });
-  });
-
   describe("Teste de Editar o Produto", () => {
     const req = {};
     const res = {};
@@ -143,25 +111,28 @@ describe('Testando Erro em Controller - Teste de Produtos', () => {
     beforeEach(() => {
       const execute = [[]];
       req.params = { id: 30 };
-      req.body = { "name": "produto", "quantity": 15 }
+      req.body = [{
+        "productId": 1,
+        "quantity": 12
+      },]
       res.status = sinon.stub()
         .returns(res);
       res.json = sinon.stub()
         .returns();
 
       sinon.stub(connection, 'execute').resolves(execute);
-      sinon.stub(ServiceSales, 'editProduct').resolves({ error: { message: 'Product not found', code: 404 } });
+      sinon.stub(ServiceSales, 'editSales').resolves({ error: { message: 'Sale not found', code: 404 } });
     });
 
     afterEach(() => {
       connection.execute.restore();
     });
 
-    it("Retorno do Status quando o produto é editado com sucesso", async () => {
-      await CreateSales.editProduct(req, res, next);
+    it("Retorno quando não acha uma venda que possa ser editada", async () => {
+      await CreateSales.editSales(req, res, next);
 
-      expect(next.calledWith({ message: 'Product not found', code: 404 })).to.be.equal(true);
-      ServiceSales.editProduct.restore();
+      expect(next.calledWith({ message: 'Sale not found', code: 404 })).to.be.equal(true);
+      ServiceSales.editSales.restore();
     });
   });
 
@@ -178,17 +149,17 @@ describe('Testando Erro em Controller - Teste de Produtos', () => {
         .returns();
 
       sinon.stub(connection, 'execute').resolves(execute);
-      sinon.stub(ServiceSales, 'deleteProduct').resolves({ error: { message: 'Product not found', code: 404 } });
+      sinon.stub(ServiceSales, 'deleteSales').resolves({ error: { message: 'Sale not found', code: 404 } });
     });
     afterEach(() => {
       connection.execute.restore();
     });
 
-    it("Retorno do Status quando falha", async () => {
-      await CreateSales.deleteProduct(req, res, next);
+    it("Retorno quando Falha em achar uma venda para Deletar", async () => {
+      await CreateSales.deleteSales(req, res, next);
 
-      expect(next.calledWith({ message: 'Product not found', code: 404 })).to.be.equal(true);
-      ServiceSales.deleteProduct.restore();
+      expect(next.calledWith({ message: 'Sale not found', code: 404 })).to.be.equal(true);
+      ServiceSales.deleteSales.restore();
     });
   });
 });
