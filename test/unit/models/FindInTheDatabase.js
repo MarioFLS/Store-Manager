@@ -22,7 +22,7 @@ describe("Testando Camada de Models - Find In The Database", () => {
     afterEach(() => {
       connection.execute.restore();
     });
-    it("Procurando Produto:Martelo de Thor  ", async () => {
+    it("Procurando Produto:Martelo de Thor", async () => {
       const response = await findItem.findProductName('Martelo de Thor');
 
       expect(response).to.be.a("object");
