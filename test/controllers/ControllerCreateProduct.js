@@ -1,8 +1,8 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
-const connection = require('../../../database/connection');
-const CreateProduct = require('../../../controllers/ControllerCreateProduct');
-const ServiceProduct = require('../../../services/ServiceProduct');
+const connection = require('../../database/connection');
+const CreateProduct = require('../../controllers/ControllerCreateProduct');
+const ServiceProduct = require('../../services/ServiceProduct');
 
 
 describe("Testando a Camada de Controller - Teste de Produtos", () => {

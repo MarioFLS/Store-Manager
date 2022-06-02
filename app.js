@@ -12,11 +12,6 @@ const salesValidation = require('./middlewares/salesValidation');
 
 const app = express();
 
-// não remova esse endpoint, é para o avaliador funcionar
-app.get('/', (_request, response) => {
-  response.send();
-});
-
 app.use(bodyParser.json());
 
 app.get('/products', Products.getAllProducts);
@@ -34,7 +29,5 @@ app.put('/sales/:id', salesValidation, quantityValidationUpdate, CreateSales.edi
 app.delete('/sales/:id', CreateSales.deleteSales);
 
 app.use(errorMiddleware);
-// não remova essa exportação, é para o avaliador funcionar
-// você pode registrar suas rotas normalmente, como o exemplo acima
-// você deve usar o arquivo index.js para executar sua aplicação 
+
 module.exports = app;
