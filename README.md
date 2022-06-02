@@ -1,5 +1,7 @@
 # Projeto Store Manager!
 
+Um Projeto feito no Curso da [Trybe!](https://www.betrybe.com/?utm_source=google&utm_medium=cpc&utm_campaign=pmax2&utm_content=ad1&gclid=CjwKCAjwv-GUBhAzEiwASUMm4gMsCoYbJWRZ4clNLOZqEP2NE69bHKEUuKKfcouMLG1L4MSPbR71CRoCHiYQAvD_BwE)
+
 ## Descrição
 Store Manager é uma aplicação BackEnd em NodeJS que permiti você interagir diretamente com o banco de dados. Dando a sensação de ser um gerante de Loja. E ter controle sobre a criação e venda de Produtos.
  
