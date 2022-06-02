@@ -1,8 +1,8 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const connection = require('../../../database/connection');
-const ServiceStore = require('../../../services/ServiceProduct');
-const findItems = require('../../../models/FindInTheDatabase');
+const connection = require('../../database/connection');
+const ServiceStore = require('../../services/ServiceProduct');
+const findItems = require('../../models/FindInTheDatabase');
 
 describe("Testando Camada de Service - Products", () => {
   describe("Testando Erros de Service", () => {

@@ -1,8 +1,8 @@
 const { expect } = require("chai");
 const res = require("express/lib/response");
 const sinon = require('sinon');
-const connection = require('../../../database/connection');
-const CreateProduct = require('../../../models/ModelCreateProduct');
+const connection = require('../../database/connection');
+const CreateProduct = require('../../models/ModelCreateProduct');
 
 describe("Testando Camada de Models - Create Products", () => {
 

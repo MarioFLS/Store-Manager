@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
-const connection = require('../../../database/connection');
-const findItem = require('../../../models/FindInTheDatabase');
+const connection = require('../../database/connection');
+const findItem = require('../../models/FindInTheDatabase');
 
 describe("Testando Camada de Models - Find In The Database", () => {
 
