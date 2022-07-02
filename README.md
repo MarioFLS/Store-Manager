@@ -39,11 +39,8 @@ Essa Aplicação Permite:
  
   > Instale as dependências [**Caso existam**] com `npm install`
 
-  ⚠ Atenção ⚠ Não rode o comando npm audit fix! Ele atualiza várias dependências do projeto, e essa atualização gera conflitos com o avaliador.
-
   ✨ **Dica:** Para rodar o projeto desta forma, obrigatoriamente você deve ter o `node` instalado em seu computador.
 
-  ✨ **Dica:** O avaliador espera que a versão do `node` utilizada seja a 16.
   <br />
 </details>
 
@@ -83,12 +80,10 @@ PORT=3000
 
 ##### :warning: Atenção
 
-- **Variáveis de ambiente além das especificadas acima não são suportadas, pois não são esperadas pelo avaliador do projeto.**
-
-- A variável **PORT** do arquivo `.env` deve ser utilizada para a conexão com o servidor. É importante utilizar essa variável para os testes serem executados corretamente tanto na máquina local quanto no avaliador.
+- A variável **PORT** do arquivo `.env` deve ser utilizada para a conexão com o servidor.
 
 Com essas configurações, enquanto estiver na máquina local, o banco será executado normalmente via localhost (possibilitando os testes via `npm test`).
-Como o arquivo `.env` não será enviado para o GitHub (não se preocupe com isso, pois já está configurado no `.gitignore`), o avaliador utilizará as suas próprias variáveis de ambiente.
+Como o arquivo `.env` não será enviado para o GitHub (não se preocupe com isso, pois já está configurado no `.gitignore`), crie suas ENVs, utilize o docker-compose como base para tal.
 
   <br />
 </details>
